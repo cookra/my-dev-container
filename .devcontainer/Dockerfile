@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
-# Install additional system packages
+# Install additional system packages including fish
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
         build-essential \
@@ -25,6 +25,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         postgresql-client \
         mysql-client \
         redis-tools \
+        fish \
         telnet \
         netcat \
         dnsutils \
@@ -50,13 +51,18 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Install starship prompt
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
 
-# Install bottom (better htop)
-RUN curl -LO https://github.com/ClementTsang/bottom/releases/download/0.9.6/bottom_0.9.6_amd64.deb \
-    && dpkg -i bottom_0.9.6_amd64.deb \
-    && rm bottom_0.9.6_amd64.deb
+# Install bottom (better htop) - architecture aware
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ]; then \
+        BOTTOM_ARCH="arm64"; \
+    else \
+        BOTTOM_ARCH="amd64"; \
+    fi && \
+    curl -LO https://github.com/ClementTsang/bottom/releases/download/0.9.6/bottom_0.9.6_${BOTTOM_ARCH}.deb \
+    && dpkg -i bottom_0.9.6_${BOTTOM_ARCH}.deb \
+    && rm bottom_0.9.6_${BOTTOM_ARCH}.deb
 
-# Set up fish as default shell
-SHELL ["/usr/bin/fish", "--command"]
+# Set up fish as default shell (now fish is installed)
 RUN chsh -s /usr/bin/fish vscode
 
 # Create projects directory
