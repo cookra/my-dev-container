@@ -1,0 +1,46 @@
+# Project files (these are yours, not to be committed)
+projects/*
+!projects/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/!settings.json
+.vscode/!extensions.json
+*.swp
+*.swo
+*~
+
+# Docker volumes (don't commit database data)
+.devcontainer/data/
+.devcontainer/*-data/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Container state
+.devcontainer/.build
+.devcontainer/container-id
+
+# Temp files
+tmp/
+temp/
+*.tmp
+
+# Keep projects directory structure
+projects/*/
+projects/*/*
+
+# But track the projects folder itself
+!projects/

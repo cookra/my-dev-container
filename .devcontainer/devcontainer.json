@@ -1,0 +1,95 @@
+{
+    "name": "Universal Dev Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20",
+            "nvmVersion": "latest"
+        },
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.12",
+            "installTools": true
+        },
+        "ghcr.io/devcontainers/features/go:1": {
+            "version": "1.22"
+        },
+        "ghcr.io/devcontainers/features/rust:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "21",
+            "installMaven": true,
+            "installGradle": true
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {
+            "version": "latest",
+            "moby": true
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/aws-cli:1": {},
+        "ghcr.io/devcontainers/features/terraform:1": {},
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+        "ghcr.io/meaningful-ooo/devcontainer-features/fish:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-vscode.vscode-typescript-next",
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint",
+                "ms-azuretools.vscode-docker",
+                "github.copilot",
+                "eamodio.gitlens",
+                "ms-vscode-remote.remote-containers",
+                "golang.go",
+                "rust-lang.rust-analyzer",
+                "redhat.java",
+                "vscjava.vscode-java-pack",
+                "hashicorp.terraform",
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "ms-vscode.makefile-tools",
+                "yzhang.markdown-all-in-one",
+                "mhutchie.git-graph",
+                "GitHub.vscode-pull-request-github",
+                "streetsidesoftware.code-spell-checker",
+                "wayou.vscode-todo-highlight"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "fish",
+                "terminal.integrated.profiles.linux": {
+                    "fish": {
+                        "path": "/usr/bin/fish"
+                    }
+                },
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": true
+                },
+                "files.autoSave": "onFocusChange",
+                "workbench.colorTheme": "Default Dark Modern",
+                "git.enableSmartCommit": true,
+                "git.confirmSync": false
+            }
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached,readonly"
+    ],
+    "remoteEnv": {
+        "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin"
+    },
+    "containerEnv": {
+        "TZ": "UTC"
+    },
+    "postCreateCommand": "sudo chown -R vscode:vscode /workspaces && .devcontainer/post-create.sh",
+    "postStartCommand": "git config --global --add safe.directory /workspaces/*",
+    "remoteUser": "vscode",
+    "workspaceFolder": "/workspaces/dev-env-container",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/dev-env-container,type=bind,consistency=delegated"
+}
